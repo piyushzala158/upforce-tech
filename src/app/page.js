@@ -1,9 +1,11 @@
-import { Button, Box } from "@mui/material";
+"use client";
+import { getProducts } from "@/actions/productsActions";
+import Home from "@/views/home";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Home() {
-  return (
-    <Box>
-      <Button variant="text">Text</Button>
-    </Box>
-  );
+export default function HomePage() {
+
+
+
+  return <Home />;
 }
