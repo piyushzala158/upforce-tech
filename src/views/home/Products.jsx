@@ -26,6 +26,9 @@ import {
 import AddEditProduct from "./AddEditProduct";
 import SubmitButton from "@/components/form/SubmitButton";
 
+//constants
+import { API_SUCCESS_MESSAGES } from "@/constants/messages";
+
 const Products = () => {
   //states with queryparams using nuqs
   const [perPage] = useQueryState("per_page", { defaultValue: 10 });
@@ -68,12 +71,11 @@ const Products = () => {
     },
     onSuccess: ({ id, isDeleted }) => {
       if (isDeleted) {
-        toast.success(API_SUCCESS_MESSAGES.API_SUCCESS_MESSAGES);
+        toast.success(API_SUCCESS_MESSAGES.DELETEPRODUCTSUCCESS);
 
         // Optimistically update the query cache
         queryClient.setQueryData(["products", page, perPage], (oldData) => {
           if (!oldData) return oldData;
-          console.log("oldData: ", oldData);
           return {
             ...oldData,
             products: oldData.products.filter((product) => product.id !== id),
@@ -172,13 +174,12 @@ const Products = () => {
 
   //handle row click
   const handleRowClick = ({ id }) => {
-    console.log("e: ", id);
     router.push(`/${id}`);
   };
 
   return (
     <Box height={"100%"}>
-      <Typography textAlign={"center"} my={2} fontSize={18} fontWeight={500}>
+      <Typography textAlign={"center"} my={2} fontSize={20} fontWeight={500}>
         Products Data
       </Typography>
 
@@ -213,6 +214,8 @@ const Products = () => {
         disableDensitySelector
         disableRowSelectionOnClick
         disableSelectionOnClick
+        disableEval
+        disableVirtualization
         slots={{
           noRowsOverlay: () => (
             <Typography textAlign={"center"} py={4}>

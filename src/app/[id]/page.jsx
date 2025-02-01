@@ -23,6 +23,7 @@ const ProductPage = async ({ params }) => {
     console.log("error: ", error);
   }
 
+  //if no data then show not found page
   if (!data) {
     notFound();
   }

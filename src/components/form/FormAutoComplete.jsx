@@ -15,6 +15,7 @@ const FormAutoComplete = ({
   required = false,
   fullWidth = false,
   loading = false,
+  error = false,
   maxHeight = 200,
 }) => {
   return (
@@ -42,6 +43,8 @@ const FormAutoComplete = ({
               label={label}
               required={required}
               placeholder={placeholder}
+              error={error}
+              helperText={error?.message}
             />
           )}
         />

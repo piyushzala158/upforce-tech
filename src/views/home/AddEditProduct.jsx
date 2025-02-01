@@ -14,6 +14,8 @@ import {
 //third party
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 //actions
@@ -28,6 +30,12 @@ import FormAutoComplete from "@/components/form/FormAutoComplete";
 import FormInput from "@/components/form/FormInput";
 import SubmitButton from "@/components/form/SubmitButton";
 
+//constats
+import {
+  API_SUCCESS_MESSAGES,
+  VALIDATION_MESSAGES,
+} from "@/constants/messages";
+
 //default values
 const defaultValues = {
   title: "",
@@ -35,6 +43,18 @@ const defaultValues = {
   category: "",
   price: "",
 };
+
+//schema
+const schema = yup.object().shape({
+  title: yup.string().required(VALIDATION_MESSAGES.titleIsRequired),
+  description: yup.string().required(VALIDATION_MESSAGES.descriptionIsRequired),
+  category: yup.string().required(VALIDATION_MESSAGES.categoryIsRequired),
+  price: yup
+    .number()
+    .typeError(VALIDATION_MESSAGES.priceTypeError)
+    .positive(VALIDATION_MESSAGES.priceMustBePositive)
+    .required(VALIDATION_MESSAGES.priceIsRequired),
+});
 
 const AddEditProduct = ({
   open = false,
@@ -55,7 +75,7 @@ const AddEditProduct = ({
     mutationKey: ["addProduct"],
     mutationFn: (data) => addProduct(data),
     onSuccess: (res) => {
-      toast.success("New Product Added.");
+      toast.success(API_SUCCESS_MESSAGES.ADDPRODUCTSUCCESS);
       reset(defaultValues);
       handleClose();
     },
@@ -66,7 +86,7 @@ const AddEditProduct = ({
     mutationKey: ["addProduct"],
     mutationFn: (payload) => editProduct(data.id, payload),
     onSuccess: (res) => {
-      toast.success("Product Updated Successfully.");
+      toast.success(API_SUCCESS_MESSAGES.EDITPRODUCTSUCCESS);
       reset(defaultValues);
       handleClose();
     },
@@ -77,9 +97,11 @@ const AddEditProduct = ({
     control,
     handleSubmit,
     reset,
-    formState: { isDirty },
+
+    formState: { isDirty, errors },
   } = useForm({
     defaultValues,
+    resolver: yupResolver(schema),
   });
 
   //reset form based is edit or add
@@ -123,7 +145,7 @@ const AddEditProduct = ({
           >
             {isEdit ? "Edit Product" : "Add Product"}
           </Typography>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <Grid2 container spacing={3}>
               <Grid2 size={6}>
                 <FormInput
@@ -133,6 +155,7 @@ const AddEditProduct = ({
                   placeHolder="Enter product title"
                   required
                   fullWidth
+                  error={errors.title}
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -142,6 +165,8 @@ const AddEditProduct = ({
                   label="Description"
                   placeHolder="Enter product description"
                   fullWidth
+                  required
+                  error={errors.description}
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -153,6 +178,8 @@ const AddEditProduct = ({
                   options={categories}
                   maxHeight={230}
                   loading={iscategoriesLoading}
+                  error={errors.category}
+                  required
                 />
               </Grid2>
               <Grid2 size={6}>
@@ -163,6 +190,8 @@ const AddEditProduct = ({
                   label="Price"
                   placeHolder="Enter product price"
                   fullWidth
+                  required
+                  error={errors.price}
                 />
               </Grid2>
               <Grid2
@@ -175,7 +204,7 @@ const AddEditProduct = ({
                   Cancel
                 </Button>
                 <SubmitButton
-                  tittle="Add"
+                  tittle={isEdit ? "Edit" : "Add"}
                   isLoading={isAddLoading || isPending}
                   disabled={!isDirty}
                   variant="outlined"

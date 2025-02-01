@@ -1,4 +1,10 @@
-import Slider from "@/components/Swiper";
+//react
+import React from "react";
+
+//next
+import Link from "next/link";
+
+//mui
 import {
   Box,
   Card,
@@ -11,19 +17,12 @@ import {
   ListItemText,
   Rating,
 } from "@mui/material";
+
+//third party
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import Slider from "@/components/Swiper";
 
-const ProductDetails = ({ id, data }) => {
-  if (!data) {
-    return (
-      <Typography variant="h6" align="center">
-        Product not found
-      </Typography>
-    );
-  }
-
+const ProductDetails = ({ data }) => {
   return (
     <>
       <Box padding={4}>

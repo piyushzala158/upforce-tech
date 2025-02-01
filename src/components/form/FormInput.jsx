@@ -13,6 +13,7 @@ const FormInput = ({
   placeHolder = "",
   required = false,
   fullWidth = false,
+  error = false,
   ...rest
 }) => {
   return (
@@ -27,6 +28,8 @@ const FormInput = ({
           label={label}
           placeholder={placeHolder}
           fullWidth={fullWidth}
+          error={error}
+          helperText={error?.message}
           {...rest}
         />
       )}

@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 //Endpoints
 import { API_ENDPOINT } from "@/constants/appConstants";
 
+//common API function with error handling
 const api = async ({
   endpoint,
   method = "GET",
@@ -46,7 +47,7 @@ const api = async ({
         toast.error(message);
       }
     }
-    // console.error(`API Error: ${status} - ${message}`);
+
     throw error.response?.data || error.message;
   }
 };
