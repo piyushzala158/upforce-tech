@@ -43,7 +43,7 @@ const AddEditProduct = ({
     enabled: open,
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending: isAddLoading } = useMutation({
     mutationKey: ["addProduct"],
     mutationFn: (data) => addProduct(data),
     onSuccess: (res) => {
@@ -53,7 +53,7 @@ const AddEditProduct = ({
     },
   });
 
-  const { mutate: editMutate } = useMutation({
+  const { mutate: editMutate, isPending } = useMutation({
     mutationKey: ["addProduct"],
     mutationFn: (payload) => editProduct(data.id, payload),
     onSuccess: (res) => {
@@ -165,7 +165,7 @@ const AddEditProduct = ({
                 </Button>
                 <SubmitButton
                   tittle="Add"
-                  isLoading={false}
+                  isLoading={isAddLoading || isPending}
                   disabled={!isDirty}
                   variant="outlined"
                   color="primary"
