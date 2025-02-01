@@ -1,0 +1,5 @@
+const API_SUCCESS_MESSAGES = {
+    ADDPRODUCTSUCCESS : '',
+    EDITPRODUCTSUCCESS : '',
+    DELETEPRODUCTSUCCESS : "Product Deleted Successfully.",
+}

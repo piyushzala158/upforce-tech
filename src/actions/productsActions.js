@@ -1,5 +1,8 @@
+
+//api function
 import api from "@/api/api";
 
+//constants
 import {
   GET_PRODUCTS,
   GET_ALL_CATEGORIES,
@@ -7,10 +10,16 @@ import {
   EDIT_PRODUCT,
   DELETE_PRODUCT,
   GET_PRODUCT_DETAILS,
+  GET_PRODUCTS_BY_SEARCH,
 } from "@/constants/endpoints";
 
 export const getProducts = async (data) => {
   const res = await api({ ...GET_PRODUCTS, params: data });
+  return res;
+};
+
+export const getProductsBySearch = async (data) => {
+  const res = await api({ ...GET_PRODUCTS_BY_SEARCH, params: data });
   return res;
 };
 

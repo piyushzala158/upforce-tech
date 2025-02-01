@@ -1,26 +1,34 @@
+//react
+import React, { useEffect } from "react";
+
+//mui
+import {
+  Button,
+  Card,
+  CardContent,
+  Dialog,
+  Grid2,
+  Typography,
+} from "@mui/material";
+
+//third party
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+//actions
 import {
   addProduct,
   editProduct,
   getAllCategories,
 } from "@/actions/productsActions";
+
+//custom components
 import FormAutoComplete from "@/components/form/FormAutoComplete";
 import FormInput from "@/components/form/FormInput";
 import SubmitButton from "@/components/form/SubmitButton";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Dialog,
-  Grid2,
-  Typography,
-} from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 
+//default values
 const defaultValues = {
   title: "",
   description: "",
@@ -34,8 +42,7 @@ const AddEditProduct = ({
   isEdit = false,
   data = null,
 }) => {
-  const [edit, setEdit] = useState(false);
-
+  //get all categories
   const { data: categories, isLoading: iscategoriesLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: () => getAllCategories(),
@@ -43,6 +50,7 @@ const AddEditProduct = ({
     enabled: open,
   });
 
+  //add product mutation
   const { mutate, isPending: isAddLoading } = useMutation({
     mutationKey: ["addProduct"],
     mutationFn: (data) => addProduct(data),
@@ -53,6 +61,7 @@ const AddEditProduct = ({
     },
   });
 
+  //Edit product mutation
   const { mutate: editMutate, isPending } = useMutation({
     mutationKey: ["addProduct"],
     mutationFn: (payload) => editProduct(data.id, payload),
@@ -63,6 +72,7 @@ const AddEditProduct = ({
     },
   });
 
+  //hook form
   const {
     control,
     handleSubmit,
@@ -72,9 +82,9 @@ const AddEditProduct = ({
     defaultValues,
   });
 
+  //reset form based is edit or add
   useEffect(() => {
     if (isEdit) {
-      setEdit(true);
       reset({
         title: data.title || "",
         description: data.description || "",
@@ -83,10 +93,10 @@ const AddEditProduct = ({
       });
     } else {
       reset(defaultValues);
-      setEdit(false);
     }
   }, [open, isEdit, reset]);
 
+  //form submit handler
   const onSubmit = (data) => {
     if (isEdit) {
       editMutate(data);
@@ -95,6 +105,7 @@ const AddEditProduct = ({
     }
   };
 
+  //handle cancel
   const handleCancel = () => {
     handleClose();
     reset();

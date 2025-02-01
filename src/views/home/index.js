@@ -2,11 +2,7 @@ import React from "react";
 import Products from "./Products";
 
 const Home = () => {
-  return (
-    <div>
-      <Products />
-    </div>
-  );
+  return <Products />;
 };
 
 export default Home;

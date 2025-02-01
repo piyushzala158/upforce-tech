@@ -1,9 +1,15 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import ReactQueryProvider from "@/components/ReactQueryProvider";
+
+//third party
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "react-hot-toast";
+
+//mui
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
+
+//custom 
+import ReactQueryProvider from "@/components/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
