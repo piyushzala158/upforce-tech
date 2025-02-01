@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import { Button, Box, Pagination, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/actions/productsActions";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { deleteProduct, getProducts } from "@/actions/productsActions";
 import { useQueryState } from "nuqs";
 import AddEditProduct from "./AddEditProduct";
+import toast from "react-hot-toast";
 
 const Products = () => {
   const [perPage, setPerPage] = useQueryState("per_page", { defaultValue: 10 });
@@ -20,10 +21,18 @@ const Products = () => {
     keepPreviousData: true,
   });
 
+  const { mutate: deleteMutate } = useMutation({
+    mutationKey: ["addProduct"],
+    mutationFn: (id) => deleteProduct(id),
+    onSuccess: () => {
+      toast.success("Product Updated Successfully.");
+    },
+  });
+
   const handleEdit = (data) => {
     setEditData(data);
-    handleAddDialogOpen();
     setIsEdit(true);
+    handleAddDialogOpen();
   };
 
   const columns = [
@@ -51,7 +60,7 @@ const Products = () => {
             variant="contained"
             color="error"
             size="small"
-            onClick={() => handleDelete(params.row.id)}
+            onClick={() => deleteMutate(params.row.id)}
             style={{ marginLeft: 8 }}
           >
             Delete
@@ -63,6 +72,8 @@ const Products = () => {
 
   const handleAddDialogClose = () => {
     setIsOpenAddDialog(false);
+    setIsEdit(false);
+    setEditData(null);
   };
 
   const handleAddDialogOpen = () => {

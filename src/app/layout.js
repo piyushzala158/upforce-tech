@@ -3,6 +3,7 @@ import "./globals.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import ReactQueryProvider from "@/components/ReactQueryProvider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppRouterCacheProvider>
           <ReactQueryProvider>
+            <Toaster />
             <NuqsAdapter>{children} </NuqsAdapter>
           </ReactQueryProvider>
         </AppRouterCacheProvider>

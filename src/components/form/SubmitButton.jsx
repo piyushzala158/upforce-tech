@@ -1,0 +1,18 @@
+import { Button, CircularProgress } from "@mui/material";
+import React from "react";
+
+const SubmitButton = ({
+  tittle = "Submit",
+  isLoading = false,
+  disabled = false,
+  ...rest
+}) => {
+  return (
+    <Button type="submit" disabled={isLoading || disabled} {...rest}>
+      {isLoading ? <CircularProgress /> : null}
+      {tittle}
+    </Button>
+  );
+};
+
+export default SubmitButton;

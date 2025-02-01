@@ -9,6 +9,7 @@ const FormInput = ({
   placeHolder = "",
   required = false,
   fullWidth = false,
+  ...rest
 }) => {
   return (
     <Controller
@@ -17,10 +18,12 @@ const FormInput = ({
       render={({ field }) => (
         <TextField
           {...field}
+          value={field.value}
           required={required}
           label={label}
           placeholder={placeHolder}
           fullWidth={fullWidth}
+          {...rest}
         />
       )}
     />
