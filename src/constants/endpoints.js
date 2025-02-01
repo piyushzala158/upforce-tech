@@ -4,6 +4,12 @@ export const GET_PRODUCTS = {
   isMultipart: false,
 };
 
+export const GET_PRODUCT_DETAILS = {
+  endpoint: "/products/{id}",
+  method: "GET",
+  isMultipart: false,
+};
+
 export const GET_ALL_CATEGORIES = {
   endpoint: "/products/categories",
   method: "GET",

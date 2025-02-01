@@ -9,7 +9,9 @@ const SubmitButton = ({
 }) => {
   return (
     <Button type="submit" disabled={isLoading || disabled} {...rest}>
-      {isLoading ? <CircularProgress size={12} sx={{ mr: 0.5 }} /> : null}
+      {isLoading ? (
+        <CircularProgress size={12} color="inherit" sx={{ mr: 0.5 }} />
+      ) : null}
       {tittle}
     </Button>
   );

@@ -1,11 +1,11 @@
-"use client";
-import { getProducts } from "@/actions/productsActions";
+import Loader from "@/components/Loader/Loader";
 import Home from "@/views/home";
-import { useQuery } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 export default function HomePage() {
-
-
-
-  return <Home />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <Home />
+    </Suspense>
+  );
 }

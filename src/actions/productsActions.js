@@ -1,17 +1,26 @@
-const { default: api } = require("@/api/api");
-const {
+import api from "@/api/api";
+
+import {
   GET_PRODUCTS,
   GET_ALL_CATEGORIES,
   ADD_PRODUCT,
   EDIT_PRODUCT,
   DELETE_PRODUCT,
-} = require("@/constants/endpoints");
+  GET_PRODUCT_DETAILS,
+} from "@/constants/endpoints";
 
 export const getProducts = async (data) => {
   const res = await api({ ...GET_PRODUCTS, params: data });
   return res;
 };
 
+export const getProductDetails = async (id) => {
+  const res = await api({
+    ...GET_PRODUCT_DETAILS,
+    endpoint: GET_PRODUCT_DETAILS.endpoint.replace("{id}", id),
+  });
+  return res;
+};
 export const getAllCategories = async () => {
   const res = await api({ ...GET_ALL_CATEGORIES });
   return res;

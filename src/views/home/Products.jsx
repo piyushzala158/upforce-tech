@@ -7,6 +7,8 @@ import { deleteProduct, getProducts } from "@/actions/productsActions";
 import { useQueryState } from "nuqs";
 import AddEditProduct from "./AddEditProduct";
 import toast from "react-hot-toast";
+import SubmitButton from "@/components/form/SubmitButton";
+import { useRouter } from "next/navigation";
 
 const Products = () => {
   const [perPage, setPerPage] = useQueryState("per_page", { defaultValue: 10 });
@@ -14,6 +16,9 @@ const Products = () => {
   const [isOpenAddDialog, setIsOpenAddDialog] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const router = useRouter();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["products", page, perPage],
@@ -22,10 +27,16 @@ const Products = () => {
   });
 
   const { mutate: deleteMutate } = useMutation({
-    mutationKey: ["addProduct"],
-    mutationFn: (id) => deleteProduct(id),
+    mutationKey: ["deleteProduct"],
+    mutationFn: async (id) => {
+      setDeletingId(id); // Set loading state for specific row
+      await deleteProduct(id);
+    },
     onSuccess: () => {
-      toast.success("Product Updated Successfully.");
+      toast.success("Product Deleted Successfully.");
+    },
+    onSettled: () => {
+      setDeletingId(null); // Reset loading state after deletion
     },
   });
 
@@ -37,8 +48,8 @@ const Products = () => {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "title", headerName: "Title", width: 200 },
-    { field: "description", headerName: "Description", width: 300 },
+    { field: "title", headerName: "Title", flex: 0.0075 },
+    { field: "description", headerName: "Description", flex: 0.0175 },
     { field: "category", headerName: "Category", width: 150 },
     { field: "price", headerName: "Price ($)", width: 100 },
     { field: "stock", headerName: "Stock", width: 100 },
@@ -56,15 +67,15 @@ const Products = () => {
           >
             Edit
           </Button>
-          <Button
+          <SubmitButton
             variant="contained"
             color="error"
+            isLoading={deletingId === params.row.id}
             size="small"
             onClick={() => deleteMutate(params.row.id)}
             style={{ marginLeft: 8 }}
-          >
-            Delete
-          </Button>
+            tittle="Delete"
+          />
         </>
       ),
     },
@@ -78,6 +89,11 @@ const Products = () => {
 
   const handleAddDialogOpen = () => {
     setIsOpenAddDialog(true);
+  };
+
+  const handleRowClick = ({ id }) => {
+    console.log("e: ", id);
+    router.push(`/${id}`);
   };
 
   return (
@@ -95,6 +111,7 @@ const Products = () => {
 
       <DataGrid
         rowHeight={50}
+        onRowClick={handleRowClick}
         rows={data?.products || []}
         columns={columns}
         loading={isLoading}
